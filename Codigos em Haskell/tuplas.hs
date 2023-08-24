@@ -14,3 +14,13 @@ ordenacao (x, y, z)
     | x > y = ordenacao (y, x, z)
     | y > z = ordenacao (x, z, y)
     | otherwise = (x, y, z)
+
+triangulo :: Int -> Int -> Int -> (String, String)
+triangulo x y z
+    | (x > (y+z)) || (z > (x+y)) || (y > (x+z)) = ("Invalido", " ")
+    | (x == y) && (x == z) = ("Valido", "Equilatero")
+    | (x /= y) && (y /= z) && (x /= z) = ("Valido", "Escaleno")
+    | otherwise = ("Valido", "Isoceles")
+
+conversao :: Float -> ((String, Float), (String, Float), (String, Float), (String, Float))
+conversao valor = if (valor < 0) then error "Nao existe dinheiro negativo" else (("Real", valor), ("Dolar", valor*0.21), ("Iene", valor*30.00), ("Euro", valor*0.19))
