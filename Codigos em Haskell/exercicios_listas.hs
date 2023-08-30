@@ -34,3 +34,20 @@ mediaReal xs = (sum xs)/ fromIntegral (length xs)
 notasMedia :: [Float] -> [Float]
 notasMedia xs = [x | x <- xs, x >= media]
     where media = (sum xs)/ fromIntegral (length xs)
+
+barraN :: String -> String
+barraN a = a ++ "\n"
+
+concatenaN :: [String] -> String
+concatenaN [] = ""
+concatenaN (x:xs) = barraN x ++ concatenaN xs
+
+imprimeLista :: [String] -> IO () 
+imprimeLista xs = putStr (concatenaN xs)
+
+stringMax :: String -> Int -> String
+stringMax _ 0 = ""
+stringMax s y
+    | (y - length s) > 0 = " " ++ stringMax s (y-1)
+    | (y - length s) == 0 = s
+    | otherwise = take y s
