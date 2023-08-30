@@ -21,3 +21,16 @@ dadosPessoais (n:ns) (i:is) = (n,i): dadosPessoais ns is
 local :: [(Estado, Capital)] -> ([Estado], [Capital])
 local [] = ([],[])
 local ((e,c):ls) = (e: (fst (local ls)), c: (snd (local ls)))
+
+somaMaiores :: [Float] -> Float
+somaMaiores [] = 0
+somaMaiores (x:xs)
+    | x >= 5.0 = x + somaMaiores xs
+    | otherwise = somaMaiores xs
+
+mediaReal :: [Float] -> Float
+mediaReal xs = (sum xs)/ fromIntegral (length xs)
+
+notasMedia :: [Float] -> [Float]
+notasMedia xs = [x | x <- xs, x >= media]
+    where media = (sum xs)/ fromIntegral (length xs)
