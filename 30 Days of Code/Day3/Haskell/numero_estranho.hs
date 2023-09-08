@@ -6,7 +6,6 @@ import Control.Monad
 import Data.Array
 import Data.Bits
 import Data.List
-import Data.List.Split
 import Data.Set
 import Data.Text
 import Debug.Trace
