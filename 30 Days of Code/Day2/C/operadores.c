@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 char* readline();
 char* ltrim(char*);
@@ -29,22 +30,24 @@ void solve(double meal_cost, int tip_percent, int tax_percent) {
     double tip = (tip_percent/100.0) * meal_cost;
     double tax = (tax_percent/100.0) * meal_cost;
     double total_cost = meal_cost + tip + tax;
-    printf("O valor total da sua refeição é: %g", round(total_cost));
+    printf("O valor total da sua refeicao eh: %g", round(total_cost));
     
 }
 
 int main()
 {
-    printf("Qual o valor bruto da refeição? ");
+    printf("Qual o valor bruto da refeicao? ");
     double meal_cost = parse_double(ltrim(rtrim(readline())));
 
     printf("Qual o valor percentual da gorgeta? ");
     int tip_percent = parse_int(ltrim(rtrim(readline())));
 
-    printf("Qual o valor percentual do imposto sobre a refeição? ");
+    printf("Qual o valor percentual do imposto sobre a refeicao? ");
     int tax_percent = parse_int(ltrim(rtrim(readline())));
 
     solve(meal_cost, tip_percent, tax_percent);
+
+    sleep(10);
 
     return 0;
 }
