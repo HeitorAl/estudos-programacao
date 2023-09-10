@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Catherine\\Documents\\Projetos de programação\\30 Days of Code\\Day4\\C#\\C#.csproj": {}
+    "/mnt/c/Users/Catherine/Documents/Projetos de programação/30 Days of Code/Day4/C#/C#.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Catherine\\Documents\\Projetos de programação\\30 Days of Code\\Day4\\C#\\C#.csproj": {
+    "/mnt/c/Users/Catherine/Documents/Projetos de programação/30 Days of Code/Day4/C#/C#.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Catherine\\Documents\\Projetos de programação\\30 Days of Code\\Day4\\C#\\C#.csproj",
+        "projectUniqueName": "/mnt/c/Users/Catherine/Documents/Projetos de programação/30 Days of Code/Day4/C#/C#.csproj",
         "projectName": "C#",
-        "projectPath": "C:\\Users\\Catherine\\Documents\\Projetos de programação\\30 Days of Code\\Day4\\C#\\C#.csproj",
-        "packagesPath": "C:\\Users\\Catherine\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Catherine\\Documents\\Projetos de programação\\30 Days of Code\\Day4\\C#\\obj\\",
+        "projectPath": "/mnt/c/Users/Catherine/Documents/Projetos de programação/30 Days of Code/Day4/C#/C#.csproj",
+        "packagesPath": "/home/arabiano/.nuget/packages/",
+        "outputPath": "/mnt/c/Users/Catherine/Documents/Projetos de programação/30 Days of Code/Day4/C#/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Catherine\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/arabiano/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -53,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/7.0.400/RuntimeIdentifierGraph.json"
         }
       }
     }
