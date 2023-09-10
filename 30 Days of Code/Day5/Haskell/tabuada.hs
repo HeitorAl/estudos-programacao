@@ -14,6 +14,8 @@ import System.IO()
 import System.IO.Unsafe()
 
 
+lstrip :: String -> String
+rstrip :: String -> String
 
 lstrip = Data.Text.unpack . Data.Text.stripStart . Data.Text.pack
 rstrip = Data.Text.unpack . Data.Text.stripEnd . Data.Text.pack
