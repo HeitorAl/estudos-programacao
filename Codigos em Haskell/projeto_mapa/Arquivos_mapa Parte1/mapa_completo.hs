@@ -36,15 +36,15 @@ mapa_init = []
 -- Tambem adicionei um erro se a cidade ja tiver no mapa
 
 addCidade :: Mapa -> Nome -> Localizacao -> Mapa
-addCidade map name coord = 
+addCidade mapa name coord = 
     if (existeCidade name map)
-        then map
-        else (name, coord, []): map
+        then mapa
+        else (name, coord, []): mapa
 
 -- Funcao para remover uma cidade do mapa
 -- Se mapa tiver vazio nao ha nada a se fazer
 -- Se a cidade passada para a remocao for encontrada, entao percorre a lista para remove-la das outras rotas
--- A funcao e passada recursivamente ate encontrar a cidade, caso nao encontre o mapa sera retornado exatamente como foi usado no parametro
+-- A funcao eh passada recursivamente ate encontrar a cidade, caso nao encontre o mapa sera retornado exatamente como foi usado no parametro
 -- Para atualizar a lista de conexoes foi usada uma funcao auxiliar que se a cidade for a que eu quero so ignoro e se n for concateno e analiso os proximos elementos
 
 -- Eu acho que se usar a funcao filter da pra tirar essa funcao auxiliar mas eu n sei usar ainda, a professora ainda vai explicar como funciona
