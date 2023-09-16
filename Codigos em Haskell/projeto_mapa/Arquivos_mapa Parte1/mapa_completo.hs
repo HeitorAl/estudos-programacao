@@ -78,12 +78,19 @@ adicionarEstrada mapa origem destino =
             | destino == nome = (nome, coord, origem:estradas) : inserir resto origem destino
             | otherwise = (nome, coord, estradas) : inserir resto origem destino
 
+-- Para remover uma estrada de uma cidade pra outra, a funcao verifica se as cidades existem no mapa, se existirem usamos uma funcao auxiliar para atualizar lista de conexoes, removendo as cidades atraves de uma funcao auxiliar
 removerEstrada :: Mapa -> Nome -> Nome -> Mapa
-removerEstrada [] _ _ = []
-removerEstrada ((nome, coord, estradas) : resto) origem destino
-  | origem == nome = (nome, coord, atualizarEstradas destino estradas) : removerEstrada resto origem destino 
-  | destino == nome = (nome, coord, atualizarEstradas origem estradas) : removerEstrada resto origem destino
-  | otherwise = (nome, coord, estradas) : removerEstrada resto origem destino 
+removerEstrada mapa origem destino =
+    if (existeCidade origem mapa && existeCidade destino mapa)
+        then remover mapa origem destino
+        else mapa
+    where
+        remover :: Mapa -> Nome -> Nome -> Mapa
+        remover [] _ _ = []
+        remover ((nome, coord, estradas):resto) origem destino
+            | origem == nome = (nome, coord, atualizarEstradas destino estradas) : remover resto origem destino 
+            | destino == nome = (nome, coord, atualizarEstradas origem estradas) : remover resto origem destino
+            | otherwise = (nome, coord, estradas) : remover resto origem destino
 
 -- Testando as funcoes
 
@@ -110,3 +117,6 @@ main = do
   let mapaAtualizado5 = removerEstrada mapaAtualizado4 "Aracaju" "Sao Cristovao"
   print (mapaAtualizado5)
   print("-------------------------------------------------")
+    
+  let mapaAtualizado6 = removerEstrada mapaAtualizado5 "Aracaju" "Barra"
+  print(mapaAtualizado6)
