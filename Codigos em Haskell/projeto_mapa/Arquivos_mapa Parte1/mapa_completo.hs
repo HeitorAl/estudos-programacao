@@ -18,7 +18,7 @@ obterCidade :: Mapa -> Nome -> Cidade
 obterCidade [] _ = error "Nao existe nenhuma cidade com esse nome"
 obterCidade ((nome,coord,estradas):resto) cidade
     | cidade == nome = (nome,coord,estradas)
-    | otherwise = obterCidade cidade
+    | otherwise = obterCidade ((nome,coord,estradas):resto) cidade
 
 existeCidade :: Nome -> Mapa -> Bool
 existeCidade _ [] = False
@@ -69,7 +69,7 @@ adicionarEstrada :: Mapa -> Nome -> Nome -> Mapa
 adicionarEstrada mapa origem destino = 
     if (existeCidade origem mapa && existeCidade destino mapa)
         then inserir mapa origem destino
-        else error "Origem e Destino nao existem"
+        else mapa
     where 
         inserir :: Mapa -> Nome -> Nome -> Mapa 
         inserir [] _ _ = []
@@ -93,20 +93,20 @@ main = do
 
   let mapaAtualizado = adicionarCidade (adicionarCidade (adicionarCidade (adicionarCidade mapa "Sao Cristovao" (4.0, 8.0)) "Aracaju" (2.0, 5.0)) "Itabaiana" (8.0, 6.0)) "Barra dos Coqueiros" (3.0, 6.0)
   print (mapaAtualizado)
-  print("-------------------------------------------------")
+  putStrLn "\n--------------------------------------------------------------------------------------\n"
 
   let mapaAtualizado2 = removerCidade "Itabaiana" mapaAtualizado
   print (mapaAtualizado2)
-  print("-------------------------------------------------")
+  putStrLn "\n--------------------------------------------------------------------------------------\n"
 
   let mapaAtualizado3 = adicionarEstrada mapaAtualizado2 "Aracaju" "Sao Cristovao"
   print (mapaAtualizado3)
-  print("-------------------------------------------------")
+  putStrLn "\n--------------------------------------------------------------------------------------\n"
 
   let mapaAtualizado4 = adicionarEstrada mapaAtualizado3 "Barra dos Coqueiros" "Aracaju"
   print (mapaAtualizado4)
-  print("-------------------------------------------------")
+  putStrLn "\n--------------------------------------------------------------------------------------\n"
 
   let mapaAtualizado5 = removerEstrada mapaAtualizado4 "Aracaju" "Sao Cristovao"
   print (mapaAtualizado5)
-  print("-------------------------------------------------")
+  putStrLn "\n--------------------------------------------------------------------------------------\n"
