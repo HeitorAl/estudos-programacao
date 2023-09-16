@@ -36,10 +36,10 @@ mapa_init = []
 -- Tambem adicionei um erro se a cidade ja tiver no mapa
 
 addCidade :: Mapa -> Nome -> Localizacao -> Mapa
-addCidade map name coord = 
-    if (existeCidade name map)
-        then map
-        else (name, coord, []): map
+addCidade mapa name coord = 
+    if (existeCidade name mapa)
+        then mapa
+        else (name, coord, []): mapa
 
 -- Funcao para remover uma cidade do mapa
 -- Se mapa tiver vazio nao ha nada a se fazer
@@ -68,10 +68,16 @@ rmCidade cidade ((nome, coord, conexoes) : resto)
 
 addEstrada :: Mapa -> Nome -> Nome -> Mapa
 addEstrada [] _ _ = []
-addEstrada ((nome, coord, conexoes) : resto) cidade1 cidade2
-  | cidade1 == nome = (nome, coord, cidade2 : conexoes) : addEstrada resto cidade1 cidade2
-  | cidade2 == nome = (nome, coord, cidade1 : conexoes) : addEstrada resto cidade1 cidade2
-  | otherwise = (nome, coord, conexoes) : addEstrada resto cidade1 cidade2
+addEstrada mapa cidade1 cidade2 = 
+    if (existeCidade cidade1 mapa && existeCidade cidade2 mapa)
+        then insereEstrada mapa cidade1 cidade2
+        else mapa
+
+insereEstrada :: Mapa -> Nome -> Nome -> Mapa
+insereEstrada ((nome, coord, conexoes) : resto) cidade1 cidade2 
+    | cidade1 == nome = (nome, coord, cidade2 : conexoes) : addEstrada resto cidade1 cidade2
+    | cidade2 == nome = (nome, coord, cidade1 : conexoes) : addEstrada resto cidade1 cidade2
+    | otherwise = (nome, coord, conexoes) : addEstrada resto cidade1 cidade2
 
 rmEstrada :: Mapa -> Nome -> Nome -> Mapa
 rmEstrada [] _ _ = []
