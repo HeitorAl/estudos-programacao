@@ -1,0 +1,7 @@
+Paris, 48.8533360255025, 2.3656508936538465, Chartres, Orleaes, Beauvais, Troyes, Reims, Compiegne
+Chartres, 48.43142317769271, 1.462583222955027, Paris, Orleaes
+Orleaes, 47.90237363787775, 1.9129240544239883, Paris, Chartres, Troyes
+Beauvais, 49.4261248263545, 2.087677099397771, Paris, Compiegne
+Compiegne, 49.42547417249454, 2.8272543123123093, Paris, Beauvais, Reims
+Reims, 49.27078798379231, 4.03253346984735, Paris, Compiegne, Troyes
+Troyes, 48.30940276531577, 4.056083547700822, Paris, Reims, Orleaes
