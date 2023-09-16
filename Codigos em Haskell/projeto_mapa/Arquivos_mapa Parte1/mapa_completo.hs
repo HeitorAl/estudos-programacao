@@ -36,12 +36,8 @@ mapa_init = []
 -- Tambem adicionei um erro se a cidade ja tiver no mapa
 
 addCidade :: Mapa -> Nome -> Localizacao -> Mapa
-addCidade mapa name coord = 
-<<<<<<< HEAD
+addCidade mapa name coord =
     if (existeCidade name mapa)
-=======
-    if (existeCidade name map)
->>>>>>> 6716e1b5de23755b24e6903fe598d0411e6e5f97
         then mapa
         else (name, coord, []): mapa
 
