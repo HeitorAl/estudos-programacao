@@ -66,17 +66,17 @@ removerCidade cidade ((nome, coord, estradas) : resto)
 -- Se nao estiver ele vai percorrer o mapa e verificar se as cidades estao no mapa, se estiverem ela vai atualizar a lista de conexoes das cidades incluindo as cidades na lista de estradas
 
 adicionarEstrada :: Mapa -> Nome -> Nome -> Mapa
-adicionarEstrada [] _ _ = []
 adicionarEstrada mapa origem destino = 
     if (existeCidade origem mapa && existeCidade destino mapa)
-        then inserirEstrada mapa origem destino
-        else mapa
-
-inserirEstrada :: Mapa -> Nome -> Nome -> Mapa
-inserirEstrada ((nome, coord, estradas) : resto) origem destino
-    | origem == nome = (nome, coord, destino : estradas) : adicionarEstrada resto origem destino
-    | destino == nome = (nome, coord, origem : estradas) : adicionarEstrada resto origem destino
-    | otherwise = (nome, coord, estradas) : adicionarEstrada resto origem destino
+        then inserir mapa origem destino
+        else error "Origem e Destino nao existem"
+    where 
+        inserir :: Mapa -> Nome -> Nome -> Mapa 
+        inserir [] _ _ = []
+        inserir ((nome, coord, estradas) : resto) origem destino  
+            | origem == nome = (nome, coord, destino:estradas) : inserir resto origem destino
+            | destino == nome = (nome, coord, origem:estradas) : inserir resto origem destino
+            | otherwise = (nome, coord, estradas) : inserir resto origem destino
 
 removerEstrada :: Mapa -> Nome -> Nome -> Mapa
 removerEstrada [] _ _ = []
@@ -89,7 +89,7 @@ removerEstrada ((nome, coord, estradas) : resto) origem destino
 
 main :: IO ()
 main = do
-  let mapa = mapa_init
+  let mapa = mapaInit
 
   let mapaAtualizado = adicionarCidade (adicionarCidade (adicionarCidade (adicionarCidade mapa "Sao Cristovao" (4.0, 8.0)) "Aracaju" (2.0, 5.0)) "Itabaiana" (8.0, 6.0)) "Barra dos Coqueiros" (3.0, 6.0)
   print (mapaAtualizado)
