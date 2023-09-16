@@ -6,108 +6,101 @@ import Mapa
 -- Funcoes auxiliares
 
 obterNome :: Cidade -> Nome
-obterNome (n, _, _) = n
+obterNome (nome, _, _) = nome
 
 obterLocal :: Cidade -> Localizacao
-obterLocal (_, c, _) = c
+obterLocal (_, coord, _) = coord
 
-obterRota :: Cidade -> Rotas
-obterRota (_, _, r) = r
+obterEstradas :: Cidade -> Rotas
+obterEstradas (_, _, estradas) = estradas
 
 obterCidade :: Mapa -> Nome -> Cidade
 obterCidade [] _ = error "Nao existe nenhuma cidade com esse nome"
-obterCidade ((c,l,r):ms) name
-    | name == c = (c,l,r)
-    | otherwise = obterCidade ms name
+obterCidade ((nome,coord,estradas):resto) cidade
+    | cidade == nome = (nome,coord,estradas)
+    | otherwise = obterCidade cidade
 
 existeCidade :: Nome -> Mapa -> Bool
 existeCidade _ [] = False
-existeCidade name (c:cs)
-    | name == obterNome c = True
-    | otherwise = existeCidade name cs
+existeCidade cidade (c:cs)
+    | cidade == obterNome c = True
+    | otherwise = existeCidade cidade cs
 
 -- Funcao que inicia/cria um mapa
 
-mapa_init :: Mapa
-mapa_init = []
+mapaInit :: Mapa
+mapaInit = []
 
 -- Funcao que adicioma cidade ao mapa
--- Usei o operador cons para adicionar uma tupla (que a cidade) ao inicio da lista (que e o mapa)
--- Tambem adicionei um erro se a cidade ja tiver no mapa
+-- A funcao verifica se a cidade dada como entrada existe no map, se existir ela retorna o mapa como estava, senao ela adiciona a cidade no inicio do mapa
 
-addCidade :: Mapa -> Nome -> Localizacao -> Mapa
-addCidade mapa name coord =
-    if (existeCidade name mapa)
+adicionarCidade :: Mapa -> Nome -> Localizacao -> Mapa
+adicionarCidade mapa cidade coord = 
+    if (existeCidade cidade mapa)
         then mapa
-        else (name, coord, []): mapa
+        else (cidade, coord, []): mapa
 
 -- Funcao para remover uma cidade do mapa
 -- Se mapa tiver vazio nao ha nada a se fazer
--- Se a cidade passada para a remocao for encontrada, entao percorre a lista para remove-la das outras rotas
+-- Se a cidade passada para a remocao for encontrada, entao percorre a lista para remove-la das outras listas de estradas
 -- A funcao eh passada recursivamente ate encontrar a cidade, caso nao encontre o mapa sera retornado exatamente como foi usado no parametro
 -- Para atualizar a lista de conexoes foi usada uma funcao auxiliar que se a cidade for a que eu quero so ignoro e se n for concateno e analiso os proximos elementos
 
 -- Eu acho que se usar a funcao filter da pra tirar essa funcao auxiliar mas eu n sei usar ainda, a professora ainda vai explicar como funciona
-rmRota :: Nome -> Rotas -> Rotas
-rmRota _ [] = []
-rmRota cidade (x : xs)
-  | cidade == x = rmRota cidade xs
-  | otherwise = x : rmRota cidade xs
+atualizarEstradas:: Nome -> Rotas -> Rotas
+atualizarEstradas _ [] = []
+atualizarEstradas cidade (x : xs)
+  | cidade == x = atualizarEstradas cidade xs
+  | otherwise = x : atualizarEstradas cidade xs
 
-rmCidade :: Nome -> Mapa -> Mapa
-rmCidade _ [] = []
-rmCidade cidade ((nome, coord, conexoes) : resto)
-  | cidade == nome = rmCidade cidade resto
-  | otherwise = (nome, coord, conexoesAtualizadas) : rmCidade cidade resto
+removerCidade :: Nome -> Mapa -> Mapa
+removerCidade _ [] = []
+removerCidade cidade ((nome, coord, estradas) : resto)
+  | cidade == nome = removerCidade cidade resto
+  | otherwise = (nome, coord, estradasAtualizadas) : removerCidade cidade resto
   where
-    conexoesAtualizadas = rmRota cidade conexoes
+    estradasAtualizadas = atualizarEstradas cidade estradas
 
 -- Funcao pra adiconar uma estrada entre duas cidades
 -- Se o mapa tiver vazio nao ha nada a se fazer
 -- Se nao estiver ele vai percorrer o mapa e verificar se as cidades estao no mapa, se estiverem ela vai atualizar a lista de conexoes das cidades incluindo as cidades na lista de estradas
 
-addEstrada :: Mapa -> Nome -> Nome -> Mapa
-addEstrada [] _ _ = []
-addEstrada mapa cidade1 cidade2 = 
-    if (existeCidade cidade1 mapa && existeCidade cidade2 mapa)
-        then insereEstrada mapa cidade1 cidade2
-        else mapa
+adicionarEstrada :: Mapa -> Nome -> Nome -> Mapa
+adicionarEstrada [] _ _ = []
+adicionarEstrada ((nome, coord, estradas) : resto) origem destino
+  | origem == nome = (nome, coord, destino : estradas) : adicionarEstrada resto origem destino
+  | destino == nome = (nome, coord, origem : estradas) : adicionarEstrada resto origem destino
+  | otherwise = (nome, coord, conexoes) : adicionarEstrada resto origem destino
 
-insereEstrada :: Mapa -> Nome -> Nome -> Mapa
-insereEstrada ((nome, coord, conexoes) : resto) cidade1 cidade2 
-    | cidade1 == nome = (nome, coord, cidade2 : conexoes) : addEstrada resto cidade1 cidade2
-    | cidade2 == nome = (nome, coord, cidade1 : conexoes) : addEstrada resto cidade1 cidade2
-    | otherwise = (nome, coord, conexoes) : addEstrada resto cidade1 cidade2
-
-rmEstrada :: Mapa -> Nome -> Nome -> Mapa
-rmEstrada [] _ _ = []
-rmEstrada ((nome, coord, conexoes) : resto) cidade1 cidade2
-  | cidade1 == nome = (nome, coord, rmRota cidade2 conexoes) : rmEstrada resto cidade1 cidade2
-  | cidade2 == nome = (nome, coord, rmRota cidade1 conexoes) : rmEstrada resto cidade1 cidade2
-  | otherwise = (nome, coord, conexoes) : rmEstrada resto cidade1 cidade2
+removerEstrada :: Mapa -> Nome -> Nome -> Mapa
+removerEstrada [] _ _ = []
+removerEstrada ((nome, coord, estradas) : resto) origem destino
+  | origem == nome = (nome, coord, atualizarEstradas cidade2 conexoes) : removerEstrada resto origem destino
+  | destino == nome = (nome, coord, atualizarEstradas cidade1 conexoes) : removerEstrada resto origem destino
+  | otherwise = (nome, coord, estradas) : removerEstrada resto origem destino
 
 -- Testando as funcoes
 
 main :: IO ()
 main = do
-  let mapa = mapa_init
+  let mapa = mapaInit
 
-  let mapaAtualizado = addCidade (addCidade (addCidade (addCidade mapa "Sao Cristovao" (4.0, 8.0)) "Aracaju" (2.0, 5.0)) "Itabaiana" (8.0, 6.0)) "Barra dos Coqueiros" (3.0, 6.0)
+  let mapaAtualizado = adicionarCidade (adicionarCidade (adicionarCidade (adicionarCidade mapa "Sao Cristovao" (4.0, 8.0)) "Aracaju" (2.0, 5.0)) "Itabaiana" (8.0, 6.0)) "Barra dos Coqueiros" (3.0, 6.0)
   print (mapaAtualizado)
   print("-------------------------------------------------")
 
-  let mapaAtualizado2 = rmCidade "Itabaiana" mapaAtualizado
+  let mapaAtualizado2 = removerCidade "Itabaiana" mapaAtualizado
   print (mapaAtualizado2)
   print("-------------------------------------------------")
 
-  let mapaAtualizado3 = addEstrada mapaAtualizado2 "Aracaju" "Sao Cristovao"
+  let mapaAtualizado3 = adicionarEstrada mapaAtualizado2 "Aracaju" "Sao Cristovao"
   print (mapaAtualizado3)
   print("-------------------------------------------------")
 
-  let mapaAtualizado4 = addEstrada mapaAtualizado3 "Barra dos Coqueiros" "Aracaju"
+  let mapaAtualizado4 = adicionarEstrada mapaAtualizado3 "Barra dos Coqueiros" "Aracaju"
   print (mapaAtualizado4)
   print("-------------------------------------------------")
 
-  let mapaAtualizado5 = rmEstrada mapaAtualizado4 "Aracaju" "Sao Cristovao"
+  let mapaAtualizado5 = removerEstrada mapaAtualizado4 "Aracaju" "Sao Cristovao"
   print (mapaAtualizado5)
   print("-------------------------------------------------")
