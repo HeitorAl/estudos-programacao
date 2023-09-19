@@ -26,13 +26,22 @@ existeCidade cidade (c:cs)
     | cidade == obterNome c = True
     | otherwise = existeCidade cidade cs
 
--- Funcao que inicia/cria um mapa
+atualizarEstradas:: Nome -> Rotas -> Rotas
+atualizarEstradas _ [] = []
+atualizarEstradas cidade (x : xs)
+  | cidade == x = atualizarEstradas cidade xs
+  | otherwise = x : atualizarEstradas cidade xs
+
+--  Funcao que inicia/cria um mapa
 
 mapaInit :: Mapa
 mapaInit = []
 
--- Funcao que adicioma cidade ao mapa
--- A funcao verifica se a cidade dada como entrada existe no map, se existir ela retorna o mapa como estava, senao ela adiciona a cidade no inicio do mapa
+--  Funcao que adiciona cidade ao mapa
+{-  A funcao verifica se a cidade dada como entrada existe no mapa, 
+    se existir ela retorna o mapa como estava, 
+    senao ela adiciona a cidade no inicio do mapa
+-}
 
 adicionarCidade :: Mapa -> Nome -> Localizacao -> Mapa
 adicionarCidade mapa cidade coord = 
@@ -40,18 +49,13 @@ adicionarCidade mapa cidade coord =
         then mapa
         else (cidade, coord, []): mapa
 
--- Funcao para remover uma cidade do mapa
--- Se mapa tiver vazio nao ha nada a se fazer
--- Se a cidade passada para a remocao for encontrada, entao percorre a lista para remove-la das outras listas de estradas
--- A funcao eh passada recursivamente ate encontrar a cidade, caso nao encontre o mapa sera retornado exatamente como foi usado no parametro
--- Para atualizar a lista de conexoes foi usada uma funcao auxiliar que se a cidade for a que eu quero so ignoro e se n for concateno e analiso os proximos elementos
+{-  Funcao para remover uma cidade do mapa
+    Caso o mapa esteja vazio ou a cidade nao exista no mapa, nada e feito
+    Caso a cidade passada para a remocao for encontrada, 
+    entao percorre a lista recursivamente para remove-la das outras listas de estradas
 
--- Eu acho que se usar a funcao filter da pra tirar essa funcao auxiliar mas eu n sei usar ainda, a professora ainda vai explicar como funciona
-atualizarEstradas:: Nome -> Rotas -> Rotas
-atualizarEstradas _ [] = []
-atualizarEstradas cidade (x : xs)
-  | cidade == x = atualizarEstradas cidade xs
-  | otherwise = x : atualizarEstradas cidade xs
+    Para atualizar a lista de conexoes foi usada a funcao auxiliar atualizarEstradas
+-}
 
 removerCidade :: Nome -> Mapa -> Mapa
 removerCidade _ [] = []
@@ -61,9 +65,11 @@ removerCidade cidade ((nome, coord, estradas) : resto)
   where
     estradasAtualizadas = atualizarEstradas cidade estradas
 
--- Funcao pra adiconar uma estrada entre duas cidades
--- Se o mapa tiver vazio nao ha nada a se fazer
--- Se nao estiver ele vai percorrer o mapa e verificar se as cidades estao no mapa, se estiverem ela vai atualizar a lista de conexoes das cidades incluindo as cidades na lista de estradas
+{-  Funcao pra adiconar uma estrada entre duas cidades
+    Caso o mapa esteja vazio ou as cidades nao existam, nada e feito
+    Caso contrario, a lista de conexoes das cidades sera atualizada
+    incluindo as cidades na lista de estradas
+-} 
 
 adicionarEstrada :: Mapa -> Nome -> Nome -> Mapa
 adicionarEstrada mapa origem destino = 
@@ -78,7 +84,11 @@ adicionarEstrada mapa origem destino =
             | destino == nome = (nome, coord, origem:estradas) : inserir resto origem destino
             | otherwise = (nome, coord, estradas) : inserir resto origem destino
 
--- Para remover uma estrada de uma cidade pra outra, a funcao verifica se as cidades existem no mapa, se existirem usamos uma funcao auxiliar para atualizar lista de conexoes, removendo as cidades atraves de uma funcao auxiliar
+{- Para remover uma estrada de uma cidade pra outra, a funcao verifica se as cidades existem no mapa, 
+    se existirem usamos uma funcao auxiliar para atualizar lista de conexoes, 
+    removendo as cidades atraves de uma funcao auxiliar
+-}
+
 removerEstrada :: Mapa -> Nome -> Nome -> Mapa
 removerEstrada mapa origem destino =
     if (existeCidade origem mapa && existeCidade destino mapa)
