@@ -1,0 +1,11 @@
+Piltover e Zaun, 0.0, 0.0,
+Noxus, -3.0, 4.0,Freljord,Demacia,Ionia,Shurima
+Demacia, -10.0, 2.0,Noxus,Freljord
+Freljord, -8.0, 5.5,Demacia,Noxus
+Ionia, 5.0, 5.0,Noxus,Aguas de Sentina,Ilha das Sombras
+Aguas de Sentina, 5.0, -1.0,Ionia,Ilha das Sombras,Ixtal
+Ilha das Sombras, 6.0, -4.0,Aguas de Sentina,Ionia
+Ixtal, 1.0, -3.0,Shurima,Aguas de Sentina,Ilha das Sombras
+Shurima, -1.5, -3.5,Ixtal,Targon
+Targon, -7.0, -4.0,Shurima
+Bandopolis, -0.0000000001, -0.0000000001,

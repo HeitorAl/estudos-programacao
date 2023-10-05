@@ -1,0 +1,7 @@
+Coruscant, 2.0, -0.5,
+Kamino, -12.0, -5.0,Tatooine,Geonosis
+Tatooine, -13.0, -2.0,Kamino,Geonosis,Naboo
+Geonosis, -14.0, -1.8,Tatooine,Kamino,Naboo
+Naboo, -12.0, 4.0,Tatooine,Kamino,Dagobah
+Dagobah, -12.0, 8.0,Naboo,Endor
+Endor, -4.0, 12.0,Dagobah
