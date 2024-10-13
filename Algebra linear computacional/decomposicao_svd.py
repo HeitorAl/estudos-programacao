@@ -2,6 +2,7 @@
 import numpy as np
 from numpy import linalg as la
 
+
 def diag(M, tol=1e-10):
     """Função que irá verificar se a matriz é diagonal
     Essa função cria uma matriz de booleanos e preenche
@@ -16,39 +17,36 @@ def diag(M, tol=1e-10):
     np.fill_diagonal(b, False)
     return np.all(np.abs(M[b]) <= tol) #M[b] selecionará os elementos valor=True
 
+
 def houseHolder_QR(A):
     """ Algoritmo de Fatoração QR Householder
-    Essa função pode demorar a processar por conta da recursividade
+        Função otimizada usando loops
     """
     A = np.matrix(A, dtype = float)
     m, n = A.shape
-    Q = np.eye(min(m,n))
+    Q = np.eye(m)
+    R = A.copy()
 
-    if n == 1:
-        return Q, A
-
-    u = A[:, 0].astype(float)
-    a = A[0, 0]
-    if np.sum(A[1:, 0]) == 0:
-        return Q, A
-    alfa = -np.sign(a) * la.norm(u)
-    e1 = np.eye(u.shape[0], 1)
-    r = alfa**2 - alfa*a
-    w = (alfa*e1 - u)
+    for j in range(min(m,n)):
+        u = R[j:, j].copy()
+        a = u[0, 0]
+        if np.sum(u[1:, 0]) == 0:
+            continue
+        alfa = -np.sign(a) * la.norm(u)
+        e1 = np.eye(u.shape[0], 1)
+        r = alfa**2 - alfa*a
+        w = (alfa*e1 - u)
     # Construindo a matriz de Householder
-    H = np.eye(m) - (1/r) * w @ w.T 
-    R = H @ A
+        H_j = np.eye(m - j) - (1/r) * w @ w.T 
+        R[j:, :] = H_j @ R[j:, :]
 
-    Q_k, R_k = houseHolder_QR(R[1: , 1:])
+        H = np.eye(m)
+        H[j:, j:] = H_j
 
-    Q[1: , 1:] = Q_k.astype(float)
-
-    R_tot = np.zeros_like(A)
-    R_tot[0, :] = R[0, :]
-    R_tot[1: , 1:] = R_k
-
+        Q = Q @ H
     # Aplicando H à direita de R e à esquerda de Q
-    return H @ Q, R_tot
+    return Q, R
+
 
 def random_svd(tol=1e-14):
     """ 
@@ -82,6 +80,7 @@ def random_svd(tol=1e-14):
     print(f'n de iteracoes: {iteracoes}')
     return A, Q_k, np.diag(R_k), Q_k.T
 
+
 def householder_svd(A, tol=1e-14):
     """ 
     Cópia da função anterior, dessa vez usando a função QR criada por mim
@@ -94,6 +93,9 @@ def householder_svd(A, tol=1e-14):
     Q_k, R_k = houseHolder_QR(A)  
     iteracoes = 1
     while iteracoes < 50000: #limitando o n de iteracoes
+
+        # verificando a convergência da região triangular superior da matriz R_k
+        # de forma otimizada
         diag_norm = la.norm(np.diag(R_k))
         triu_norm = la.norm(R_k[np.triu_indices(R_k.shape[0], 1)])
         if triu_norm / diag_norm < tol:
@@ -104,15 +106,16 @@ def householder_svd(A, tol=1e-14):
     print(f'n de iteracoes: {iteracoes}')
     return A, Q_k, np.diag(R_k), Q_k.T
 
-"""Como conclusão após alguns testes eu percebi que para uma tolerância maior
-que 1e-10 a função que utiliza a la.qr
-"""
 
 A, B, C, D = random_svd()
 M, U, S, Vh = householder_svd(A)
+J, K, V = la.svd(A)
 tupla1 = (A,B,C,D)
 tupla2 = (M, U, S, Vh)
+tupla3 = (J, K, V)
 
+# Comparando as 3 funções
 for i in range(len(tupla1)-1):
     print(tupla1[i+1],'\n')
     print(tupla2[i+1],'\n')
+    print(tupla3[i],'\n')
